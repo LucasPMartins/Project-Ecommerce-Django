@@ -25,6 +25,9 @@ class Order(models.Model):
         return super_save
 
 class OrderItem(models.Model):
+    class Meta:
+        verbose_name = 'Order Item'
+        verbose_name_plural = 'Order Items'
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.CharField(max_length=255)
     product_id = models.PositiveIntegerField()

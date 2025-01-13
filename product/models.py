@@ -27,14 +27,20 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
 
     def save(self, *args, **kwargs):
-        super_save = super().save(*args, **kwargs)
+        # Save the instance to ensure it has a primary key
+        super().save(*args, **kwargs)
+
         if not self.slug:
             self.slug = f'{slugify(self.name)}-{self.id}'
+
         if self.product_type == 'variable':
-            self.stock = sum([var.stock for var in self.variations.all()])
+            if self.variations:
+                self.stock = sum([var.stock for var in self.variations.all()])
+
         if self.image:
             self.image = resize_image(self.image)
-        return super_save
+
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -42,6 +48,9 @@ class Product(models.Model):
 
 # Atributo: como "cor" ou "tamanho"
 class AttributeName(models.Model):
+    class Meta:
+        verbose_name = "Attribute Name"
+        verbose_name_plural = "Attribute Names"
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -49,6 +58,9 @@ class AttributeName(models.Model):
 
 # Valores possíveis para um atributo (ex.: "azul", "M")
 class AttributeValue(models.Model):
+    class Meta:
+        verbose_name = "Attribute Value"
+        verbose_name_plural = "Attribute Values"
     attr = models.ForeignKey(AttributeName, on_delete=models.CASCADE, related_name="values")
     value = models.CharField(max_length=255,unique=True)
 
@@ -57,6 +69,9 @@ class AttributeValue(models.Model):
 
 # Variação do Produto
 class ProductVariation(models.Model):
+    class Meta:
+        verbose_name = "Product Variation"
+        verbose_name_plural = "Product Variations"
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="variations"
     )
