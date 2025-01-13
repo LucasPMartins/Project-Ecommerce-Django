@@ -9,15 +9,14 @@ class ProductVariationInline(admin.TabularInline):
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id','name','slug']
-    search_fields = ('id','name', 'slug')
+    list_display = ['id','name',]
+    search_fields = ('id','name',)
     list_per_page = 10
     ordering = ('-id',)
-    prepopulated_fields = {'slug':('name',)}
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id','name','slug','price','stock','category']
+    list_display = ['id','name','slug','price','stock']
     list_display_links = ['name']
     search_fields = ('id','name', 'slug')
     list_per_page = 10

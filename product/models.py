@@ -1,20 +1,11 @@
 from django.db import models
 from utils.images import resize_image
-from utils.rands import new_slugify
+from django.utils.text import slugify
 
 class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
-
     name = models.CharField(max_length=100,unique=True,default=None, null=True, blank=True)
-    slug = models.SlugField(max_length=100, unique=True, 
-        default=None, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = new_slugify(self.name)
-        return super().save(*args, **kwargs)
-    
     def __str__(self):
         return self.name
 
@@ -32,17 +23,16 @@ class Product(models.Model):
         choices=[('simple','Simple'),('variable','Variable')],
         default='simple'
         )
-    category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,blank=True)
+    category = models.ManyToManyField(Category,blank=True)
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
 
     def save(self, *args, **kwargs):
+        super_save = super().save(*args, **kwargs)
         if not self.slug:
-            self.slug = new_slugify(self.name)
+            self.slug = f'{slugify(self.name)}-{self.id}'
         if self.product_type == 'variable':
             self.stock = sum([var.stock for var in self.variations.all()])
-        super_save = super().save(*args, **kwargs)
         if self.image:
-            print(self.image.name)
             self.image = resize_image(self.image)
         return super_save
 
