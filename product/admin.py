@@ -10,6 +10,7 @@ class ProductVariationInline(admin.TabularInline):
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['id','name',]
+    list_display_links = ['id','name',]
     search_fields = ('id','name',)
     list_per_page = 10
     ordering = ('-id',)
@@ -17,7 +18,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id','name','slug','price','stock']
-    list_display_links = ['name']
+    list_display_links = ['id','name']
     search_fields = ('id','name', 'slug')
     list_per_page = 10
     ordering = ('-id',)
@@ -31,6 +32,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.AttributeName)
 class AttributeAdmin(admin.ModelAdmin):
     list_display = ['id','name']
+    list_display_links = ['id','name']
     search_fields = ('id','name')
     list_per_page = 10
     ordering = ('-id',)
@@ -39,9 +41,11 @@ class AttributeAdmin(admin.ModelAdmin):
 class AttributeValueAdmin(admin.ModelAdmin):
     list_display = ['id','attr','value']
     search_fields = ('attr','value')
+    list_display_links = ['id']
     list_per_page = 10
     ordering = ('-id',)
 
 @admin.register(models.ProductVariation)
 class ProductVariationAdmin(admin.ModelAdmin):
     list_display = ['id','product','price','stock']
+    list_display_links = ['id','product']
