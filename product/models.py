@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 from utils.images import resize_image
 from utils.rands import new_slugify
 
@@ -22,7 +22,7 @@ class Product(models.Model):
         default=None, null=True, blank=True)
     long_desciption = models.TextField(max_length=999)
     short_description = models.TextField(max_length=255)
-    image = models.ImageField(upload_to='product/images/%Y/%m',blank=True,default='')
+    image = models.ImageField(upload_to='product_images/%Y/%m',blank=True,default='')
     price = models.DecimalField(max_digits=100,decimal_places=2)
     discount_price = models.DecimalField(max_digits=100,decimal_places=2,default=0.00)
     product_type = models.CharField(
@@ -38,10 +38,11 @@ class Product(models.Model):
             self.slug = new_slugify(self.name)
         if self.product_type == 'variable':
             self.stock = sum([var.stock for var in self.variations.all()])
-        max_image_size = 800
+        super_save = super().save(*args, **kwargs)
         if self.image:
-            self.image = resize_image(self.image, max_image_size)
-        return super().save(*args, **kwargs)
+            print(self.image.name)
+            self.image = resize_image(self.image)
+        return super_save
 
     def __str__(self):
         return self.name
