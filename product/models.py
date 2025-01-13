@@ -4,6 +4,8 @@ from utils.images import resize_image
 from utils.rands import new_slugify
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = 'Categories'
     name = models.CharField(max_length=100,unique=True,default=None, null=True, blank=True)
     slug = models.SlugField(max_length=100, unique=True, 
         default=None, null=True, blank=True)
@@ -17,8 +19,8 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=200, unique=True, 
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=300, unique=True, 
         default=None, null=True, blank=True)
     long_desciption = models.TextField(max_length=999)
     short_description = models.TextField(max_length=255)
@@ -58,7 +60,7 @@ class AttributeName(models.Model):
 # Valores possíveis para um atributo (ex.: "azul", "M")
 class AttributeValue(models.Model):
     attr = models.ForeignKey(AttributeName, on_delete=models.CASCADE, related_name="values")
-    value = models.CharField(max_length=50,unique=True)
+    value = models.CharField(max_length=255,unique=True)
 
     def __str__(self):
         return f"{self.attr.name}: {self.value}"
