@@ -58,7 +58,7 @@ class AttributeName(models.Model):
 # Valores possíveis para um atributo (ex.: "azul", "M")
 class AttributeValue(models.Model):
     attr = models.ForeignKey(AttributeName, on_delete=models.CASCADE, related_name="values")
-    value = models.CharField(max_length=50)
+    value = models.CharField(max_length=50,unique=True)
 
     def __str__(self):
         return f"{self.attr.name}: {self.value}"
