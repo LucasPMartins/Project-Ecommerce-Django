@@ -1,15 +1,13 @@
 from django.contrib import admin
-from .models import Order, ItemOrder
+from .models import Order, OrderItem
 
-class ItemOrderInline(admin.TabularInline):
-    model = ItemOrder
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
     extra = 1
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'total', 'status')
-    inlines = [ItemOrderInline]
+    inlines = [OrderItemInline]
 
-@admin.register(ItemOrder)
-class ItemOrderAdmin(admin.ModelAdmin):
-    pass
+admin.site.register(OrderItem)

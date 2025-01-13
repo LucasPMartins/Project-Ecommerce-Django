@@ -24,7 +24,7 @@ class Order(models.Model):
         self.total = sum([item.price * item.quantity for item in self.items.all()]) if self.items.all() else 0
         return super_save
 
-class ItemOrder(models.Model):
+class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.CharField(max_length=255)
     product_id = models.PositiveIntegerField()
