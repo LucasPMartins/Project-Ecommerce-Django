@@ -1,11 +1,11 @@
 from django.db import models
-from django.conf import settings
 from utils.images import resize_image
 from utils.rands import new_slugify
 
 class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
+
     name = models.CharField(max_length=100,unique=True,default=None, null=True, blank=True)
     slug = models.SlugField(max_length=100, unique=True, 
         default=None, null=True, blank=True)
