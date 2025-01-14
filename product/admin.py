@@ -17,7 +17,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id','name','slug','get_formatted_price','stock']
+    list_display = ['id','name','get_formatted_price','get_formatted_discount_price','stock']
     list_display_links = ['id','name']
     search_fields = ('id','name', 'slug')
     list_per_page = 10

@@ -1,6 +1,7 @@
 from django.db import models
 from utils.images import resize_image
 from django.utils.text import slugify
+from utils import format
 
 class Category(models.Model):
     class Meta:
@@ -27,10 +28,10 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
 
     def get_formatted_price(self):
-        return f'R${self.price}'
+        return format.format_price(self.price)
     get_formatted_price.short_description = 'Price'
     def get_formatted_discount_price(self):
-        return f'R${self.discount_price}'
+        return format.format_price(self.discount_price)
     get_formatted_discount_price.short_description = 'Discount Price'
 
 
