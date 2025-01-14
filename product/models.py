@@ -37,7 +37,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         current_image_name = str(self.image.name)
-        super_save = super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if not self.slug:
             self.slug = f'{slugify(self.name)}-{self.id}'
@@ -45,6 +45,8 @@ class Product(models.Model):
         if self.product_type == 'variable':
             if self.variations:
                 self.stock = sum([var.stock for var in self.variations.all()])
+                self.price = self.variations.first().price
+                self.discount_price = self.variations.first().discount_price
 
         image_changed = False
         if self.image:
@@ -52,7 +54,7 @@ class Product(models.Model):
         if image_changed:
             resize_image(self.image, new_width=900,quality=70)
 
-        return super_save
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -88,12 +90,16 @@ class ProductVariation(models.Model):
         Product, on_delete=models.CASCADE, related_name="variations"
     )
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    discount_price = models.DecimalField(max_digits=100,decimal_places=2,default=0.00)
     attributes = models.ManyToManyField(AttributeValue, related_name="variations")
     stock = models.PositiveIntegerField(default=0)
 
     def get_fomatted_price(self):
-        return f"R${self.price}"
+        return format.format_price(self.price)
     get_fomatted_price.short_description = "Price"
+    def get_fomatted_discount_price(self):
+        return format.format_price(self.discount_price)
+    get_fomatted_discount_price.short_description = "Discount Price"
 
     def save(self, *args, **kwargs):
         # Define o preço padrão como o preço do produto, se não for especificado

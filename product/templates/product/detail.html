@@ -33,15 +33,30 @@
                         </span>
                     </p>
 
-                    <form action="/addtocart/" id="form-add-to-cart">
+                    <form action="{% url 'product:addtocart' %}" id="form-add-to-cart">
                         <div class="form-group">
                             <select id="select-variacoes" name="vid" class="form-control form-control-lg">
-                                <option data-preco="R$ 59,90" data-preco-promocional="R$ 39,90" value="45">P
+                                {% if product.product_type == 'simple'%}
+                                <option data-preco="{{ product.price | format_price }}" value="{{ product.id }}">
+                                    {{ product.name }}
                                 </option>
-                                <option data-preco="R$ 51,90" data-preco-promocional="R$ 49,90" value="45">M
+                                {% else %}
+                                {% for variation in product.variations.all %}
+                                {% for attribute in variation.attributes.all %}
+                                {% if variation.discount_price > 0 %}
+                                <option data-preco="{{ variation.discount_price | format_price }}"
+                                    data-preco-promocional="{{ variation.price | format_price  }}"
+                                    value="{{ variation.id }}">
+                                    {{ attribute.value }}
                                 </option>
-                                <option data-preco="R$ 52,90" data-preco-promocional="R$ 89,90" value="45">G
+                                {% else %}
+                                <option data-preco="{{ variation.price | format_price }}" value="{{ variation.id }}">
+                                    {{ attribute.value }}
                                 </option>
+                                {% endif %}
+                                {% endfor %}
+                                {% endfor %}
+                                {% endif %}
                             </select>
                         </div>
 

@@ -4,7 +4,7 @@ from . import models
 class ProductVariationInline(admin.TabularInline):
     model = models.ProductVariation
     extra = 1  # Número de variações extras exibidas por padrão
-    fields = ('price', 'attributes', 'stock')  # Campos que serão exibidos no inline
+    fields = ('price','discount_price', 'attributes', 'stock')  # Campos que serão exibidos no inline
     autocomplete_fields = ('attributes',)  
 
 @admin.register(models.Category)
@@ -47,5 +47,5 @@ class AttributeValueAdmin(admin.ModelAdmin):
 
 @admin.register(models.ProductVariation)
 class ProductVariationAdmin(admin.ModelAdmin):
-    list_display = ['id','product','get_fomatted_price','stock']
+    list_display = ['id','product','get_fomatted_price','get_fomatted_discount_price','stock']
     list_display_links = ['id','product']
