@@ -17,7 +17,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id','name','slug','price','stock']
+    list_display = ['id','name','slug','get_formatted_price','stock']
     list_display_links = ['id','name']
     search_fields = ('id','name', 'slug')
     list_per_page = 10
@@ -47,5 +47,5 @@ class AttributeValueAdmin(admin.ModelAdmin):
 
 @admin.register(models.ProductVariation)
 class ProductVariationAdmin(admin.ModelAdmin):
-    list_display = ['id','product','price','stock']
+    list_display = ['id','product','get_fomatted_price','stock']
     list_display_links = ['id','product']

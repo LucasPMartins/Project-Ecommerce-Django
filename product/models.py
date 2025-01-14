@@ -26,6 +26,14 @@ class Product(models.Model):
     category = models.ManyToManyField(Category,blank=True)
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
 
+    def get_formatted_price(self):
+        return f'R${self.price}'
+    get_formatted_price.short_description = 'Price'
+    def get_formatted_discount_price(self):
+        return f'R${self.discount_price}'
+    get_formatted_discount_price.short_description = 'Discount Price'
+
+
     def save(self, *args, **kwargs):
         # Save the instance to ensure it has a primary key
         super().save(*args, **kwargs)
@@ -78,6 +86,10 @@ class ProductVariation(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     attributes = models.ManyToManyField(AttributeValue, related_name="variations")
     stock = models.PositiveIntegerField(default=0)
+
+    def get_fomatted_price(self):
+        return f"R${self.price}"
+    get_fomatted_price.short_description = "Price"
 
     def save(self, *args, **kwargs):
         # Define o preço padrão como o preço do produto, se não for especificado
