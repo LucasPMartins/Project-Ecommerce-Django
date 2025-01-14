@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load omfilters %}
 
 {% block content %}
 
@@ -11,17 +12,26 @@
             <div class="card">
 
                 {% if product.image %}
-                <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                <a href="{{ product.slug }}">
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                </a>
                 {% endif %}
+
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.short_description }}</p>
                     <div class="container product-price-block text-center">
                         <span class="product-price">
-                            R$ 54,90
+                            {% if product.discount_price > 0 %}
+                            R$ {{ product.discount_price | format_price }}
+                            {% else %}
+                            R$ {{ product.price | format_price }}
+                            {% endif %}
                         </span>
                         <span class="product-old-price text-muted">
-                            R$ 99,90
+                            {% if product.discount_price > 0 %}
+                            R$ {{ product.price | format_price}}
+                            {% endif %}
                         </span>
                     </div>
                 </div>

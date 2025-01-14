@@ -35,8 +35,8 @@ class Product(models.Model):
 
 
     def save(self, *args, **kwargs):
-        # Save the instance to ensure it has a primary key
-        super().save(*args, **kwargs)
+        current_image_name = str(self.image.name)
+        super_save = super().save(*args, **kwargs)
 
         if not self.slug:
             self.slug = f'{slugify(self.name)}-{self.id}'
@@ -45,10 +45,13 @@ class Product(models.Model):
             if self.variations:
                 self.stock = sum([var.stock for var in self.variations.all()])
 
+        image_changed = False
         if self.image:
-            self.image = resize_image(self.image)
+            image_changed = current_image_name != self.image.name
+        if image_changed:
+            resize_image(self.image, new_width=900,quality=70)
 
-        return super().save(*args, **kwargs)
+        return super_save
 
     def __str__(self):
         return self.name
