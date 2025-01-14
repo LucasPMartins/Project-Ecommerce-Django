@@ -10,10 +10,12 @@
     {% include "partials/_nav.html" %}
 
     <main class="container mt-4 mb-4">
+        {% include 'partials/_messages.html' %}
         {% block content %}{% endblock content %}
     </main>
 
     {% include "partials/_footer.html" %}
+
 </body>
 
 </html>

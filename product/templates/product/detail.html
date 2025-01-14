@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg">
+                <div class="row no-gutters">
+                    <div class="col-lg-12">
+                        {% if product.image %}
+                        <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="mt-4 mt-lg-0">
+                    <h1 class="h2">{{ product.name }}</h1>
+                    <p class="lead">{{ product.short_description}}</p>
+                    <p class="lead">
+                        <span id="variation-preco" class="lead product-price">
+                            {% if product.discount_price > 0 %}
+                            {{ product.discount_price | format_price }}
+                            {% else %}
+                            {{ product.price | format_price }}
+                            {% endif %}
+                        </span>
+                        <span id="variation-preco-promocional" class="lead product-old-price text-muted">
+                            {% if product.discount_price > 0 %}
+                            {{ product.price | format_price}}
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    <form action="/addtocart/" id="form-add-to-cart">
+                        <div class="form-group">
+                            <select id="select-variacoes" name="vid" class="form-control form-control-lg">
+                                <option data-preco="R$ 59,90" data-preco-promocional="R$ 39,90" value="45">P
+                                </option>
+                                <option data-preco="R$ 51,90" data-preco-promocional="R$ 49,90" value="45">M
+                                </option>
+                                <option data-preco="R$ 52,90" data-preco-promocional="R$ 89,90" value="45">G
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="text-left">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                Adicionar ao carrinho
+                            </button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-5">
+                    <h2 class="text-center">{{ product.name }}</h2>
+                    {{ product.long_description | linebreaks}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
