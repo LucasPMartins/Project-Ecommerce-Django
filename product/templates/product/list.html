@@ -23,14 +23,14 @@
                     <div class="container product-price-block text-center">
                         <span class="product-price">
                             {% if product.discount_price > 0 %}
-                            R$ {{ product.discount_price | format_price }}
+                            {{ product.discount_price | format_price }}
                             {% else %}
-                            R$ {{ product.price | format_price }}
+                            {{ product.price | format_price }}
                             {% endif %}
                         </span>
                         <span class="product-old-price text-muted">
                             {% if product.discount_price > 0 %}
-                            R$ {{ product.price | format_price}}
+                            {{ product.price | format_price}}
                             {% endif %}
                         </span>
                     </div>
