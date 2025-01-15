@@ -31,6 +31,7 @@
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
             </li>
+            {% if request.session.cart %}
             <li class="nav-item">
                 <a class="nav-link nav-cart-link active" href="{% url 'product:cart' %}">
                     <span class="nav-cart-text mr-1">
@@ -44,6 +45,7 @@
                     </span>
                 </a>
             </li>
+            {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
