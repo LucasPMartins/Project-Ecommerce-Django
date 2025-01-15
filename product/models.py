@@ -107,5 +107,9 @@ class ProductVariation(models.Model):
             self.price = self.product.price
         super().save(*args, **kwargs)
 
+    def toStringAttributes(self):
+        return ' '.join([attr.value for attr in self.attributes.all()])
+
     def __str__(self):
-        return f"Variation of {self.product.name}"
+        attrs = self.toStringAttributes()
+        return f"Variation of {self.product.name} - {attrs}"

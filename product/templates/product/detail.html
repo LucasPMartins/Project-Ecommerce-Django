@@ -40,22 +40,22 @@
                                 <option data-preco="{{ product.price | format_price }}" value="{{ product.id }}">
                                     {{ product.name }}
                                 </option>
+                                <input type="hidden" name="is_simple_product" value="true">
                                 {% else %}
                                 {% for variation in product.variations.all %}
-                                {% for attribute in variation.attributes.all %}
                                 {% if variation.discount_price > 0 %}
                                 <option data-preco="{{ variation.discount_price | format_price }}"
                                     data-preco-promocional="{{ variation.price | format_price  }}"
                                     value="{{ variation.id }}">
-                                    {{ attribute.value }}
+                                    {{ variation.toStringAttributes }}
                                 </option>
                                 {% else %}
                                 <option data-preco="{{ variation.price | format_price }}" value="{{ variation.id }}">
-                                    {{ attribute.value }}
+                                    {{ variation.toStringAttributes }}
                                 </option>
                                 {% endif %}
                                 {% endfor %}
-                                {% endfor %}
+                                <input type="hidden" name="is_simple_product" value="false">
                                 {% endif %}
                             </select>
                         </div>
