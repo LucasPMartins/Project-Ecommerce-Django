@@ -19,6 +19,9 @@ class ProductDetailView(DetailView):
 
 class AddToCartView(View):
     def get(self,*args, **kwargs):
+        # if self.request.session.get('cart'):
+        #     del self.request.session['cart']
+        #     self.request.session.save()
 
         http_referer = self.request.META.get(
             'HTTP_REFERER',
@@ -86,11 +89,31 @@ class AddToCartView(View):
         return redirect(http_referer)
 
 class RemoveFromCartView(View):
-    ...
+    def get(self,*args, **kwargs):
+        http_referer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('product:list')
+            )
+        variation_id = self.request.GET.get('vid')
+        if not variation_id:
+            messages.error(self.request, 'Product not found')
+            return redirect(http_referer)
+
+        cart = self.request.session.get('cart', {})
+        if variation_id in cart:
+            del cart[variation_id]
+            self.request.session.save()
+            messages.success(self.request, 'Product removed from cart')
+        else:
+            messages.error(self.request, 'Product not found in cart')
+        return redirect(http_referer)
 
 class CartView(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'product/cart.html')
+        context = {
+            'cart': self.request.session.get('cart', {}),
+        }
+        return render(self.request, 'product/cart.html',context)
 
 class FinalizeView(View):
     ...
