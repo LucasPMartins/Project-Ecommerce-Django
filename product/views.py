@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-from django.shortcuts import redirect,reverse,get_object_or_404
+from django.shortcuts import redirect, render,reverse,get_object_or_404
 from django.views.generic import ListView,DetailView
 from django.views import View
 from django.contrib import messages
@@ -20,26 +19,28 @@ class ProductDetailView(DetailView):
 
 class AddToCartView(View):
     def get(self,*args, **kwargs):
+
         http_referer = self.request.META.get(
             'HTTP_REFERER',
             reverse('product:list')
             )
-        product_id = self.request.GET.get('vid')
+        variation_id = self.request.GET.get('vid')
         is_simple_product = self.request.GET.get('is_simple_product') == 'true'
 
-        if not product_id:
+        if not variation_id:
             messages.error(self.request, 'Product not found')
             return redirect(http_referer)
 
         if is_simple_product:
-            product = get_object_or_404(models.Product, id=product_id)
-            variant = None
+            variation = get_object_or_404(models.Product, id=variation_id)
+            product = variation
         else:
-            variant = get_object_or_404(models.ProductVariation, id=product_id)
-            product = variant.product
+            variation = get_object_or_404(models.ProductVariation, id=variation_id)
+            product = variation.product
 
-        print('Product:', product)
-        print('Variant:', variant)
+        if variation.stock < 1:
+            messages.error(self.request, 'Product out of stock')
+            return redirect(http_referer)
 
         if not self.request.session.get('cart'):
             self.request.session['cart'] = {}
@@ -47,19 +48,49 @@ class AddToCartView(View):
 
         cart = self.request.session['cart']
         
-        if product_id in cart:
-            # cart[variant_id] += 1
-            pass
-        else:
-            pass
+        if variation_id in cart:
+            cart_quantity = cart[variation_id]['quantity']
+            cart_quantity += 1
 
-        return HttpResponse(f'Added to cart:{product.name} {variant.toStringAttributes() if variant else ""}')
+            if variation.stock < cart_quantity:
+                messages.warning(
+                    self.request, 
+                    f'Insufficient stock for {cart_quantity}x in {product.name}.'
+                    f'Added {variation.stock}x to cart'
+                )
+                cart_quantity = variation.stock
+
+            cart[variation_id]['quantity'] = cart_quantity
+            cart[variation_id]['quantitative_price'] = cart[variation_id]['price'] * cart_quantity
+            cart[variation_id]['quantitative_discount_price'] = cart[variation_id]['discount_price'] * cart_quantity
+        else:
+            cart[variation_id] = {
+                'product_id': product.id,
+                'name': product.name,
+                'variation_name': variation.toStringAttributes() if not is_simple_product else '',
+                'variation_id': variation.id if not is_simple_product else None,
+                'price': variation.price,
+                'discount_price': variation.discount_price,
+                'quantitative_price': variation.price,
+                'quantitative_discount_price': variation.discount_price,
+                'quantity': 1,
+                'slug': product.slug,
+                'image': product.image.url,
+            }
+        self.request.session.save()
+        messages.success(
+            self.request,
+            f'Product {product.name} {variation.toStringAttributes() if not is_simple_product else '' } '
+            f'added to cart ({cart[variation_id]["quantity"]}x)'
+            )
+        return redirect(http_referer)
 
 class RemoveFromCartView(View):
     ...
 
 class CartView(View):
-    ...
+    def get(self, *args, **kwargs):
+        return render(self.request, 'product/cart.html')
 
 class FinalizeView(View):
     ...

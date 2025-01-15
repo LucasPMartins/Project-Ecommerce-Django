@@ -17,8 +17,8 @@ class Product(models.Model):
     long_description = models.TextField(max_length=999)
     short_description = models.TextField(max_length=255)
     image = models.ImageField(upload_to='product_images/%Y/%m',blank=True,default='')
-    price = models.DecimalField(max_digits=100,decimal_places=2)
-    discount_price = models.DecimalField(max_digits=100,decimal_places=2,default=0.00)
+    price = models.FloatField(max_length=100)
+    discount_price = models.FloatField(max_length=100,default=0.00)
     product_type = models.CharField(
         max_length=20,
         choices=[('simple','Simple'),('variable','Variable')],
@@ -89,8 +89,8 @@ class ProductVariation(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="variations"
     )
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    discount_price = models.DecimalField(max_digits=100,decimal_places=2,default=0.00)
+    price = models.FloatField(max_length=100, null=True, blank=True)
+    discount_price = models.FloatField(max_length=100,default=0.00)
     attributes = models.ManyToManyField(AttributeValue, related_name="variations")
     stock = models.PositiveIntegerField(default=0)
 
