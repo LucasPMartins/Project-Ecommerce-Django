@@ -1,5 +1,7 @@
 def total_cart_qty(cart):
-    return sum([item['quantity'] for item in cart.values()])
+    if isinstance(cart, dict):
+        return sum([item['quantity'] for item in cart.values()])
+    return 0
 
 def total_cart_price(cart):
     sum_ = 0

@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         <a href="{% url 'product:detail' product.slug %}">{{ product.name }}</a>
-                        <a class="ml-3" href="{% url 'product:removefromcart' %}?vid={{ product.variation_id }}">
+                        <a class="ml-3" href="{% url 'product:removefromcart' %}?vid={{ product.product_id }}">
                             <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
                         </a>
                     </td>

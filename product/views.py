@@ -49,10 +49,12 @@ class AddToCartView(View):
             self.request.session['cart'] = {}
             self.request.session.save()
 
-        cart = self.request.session['cart']
-        
-        if variation_id in cart:
-            cart_quantity = cart[variation_id]['quantity']
+        cart = self.request.session.get('cart')
+
+        item_id = str(product.id)
+
+        if item_id in cart:
+            cart_quantity = cart[item_id]['quantity']
             cart_quantity += 1
 
             if variation.stock < cart_quantity:
@@ -63,11 +65,11 @@ class AddToCartView(View):
                 )
                 cart_quantity = variation.stock
 
-            cart[variation_id]['quantity'] = cart_quantity
-            cart[variation_id]['quantitative_price'] = cart[variation_id]['price'] * cart_quantity
-            cart[variation_id]['quantitative_discount_price'] = cart[variation_id]['discount_price'] * cart_quantity
+            cart[item_id]['quantity'] = cart_quantity
+            cart[item_id]['quantitative_price'] = cart[item_id]['price'] * cart_quantity
+            cart[item_id]['quantitative_discount_price'] = cart[item_id]['discount_price'] * cart_quantity
         else:
-            cart[variation_id] = {
+            cart[item_id] = {
                 'product_id': product.id,
                 'name': product.name,
                 'variation_name': variation.toStringAttributes() if not is_simple_product else '',
@@ -83,8 +85,8 @@ class AddToCartView(View):
         self.request.session.save()
         messages.success(
             self.request,
-            f'Product {product.name} {variation.toStringAttributes() if not is_simple_product else '' } '
-            f'added to cart ({cart[variation_id]["quantity"]}x)'
+            f'Product {cart[item_id]["name"]} {cart[item_id]["variation_name"] + ' ' if cart[item_id]["variation_name"] else ''}'
+            f'added to cart ({cart[item_id]["quantity"]}x)'
             )
         return redirect(http_referer)
 
@@ -101,9 +103,14 @@ class RemoveFromCartView(View):
 
         cart = self.request.session.get('cart', {})
         if variation_id in cart:
+            product = cart[variation_id]
+            messages.success(
+                self.request,
+        f'Product {product['name']} {product['variation_name'] + ' ' if product['variation_name'] else ''} '
+        'removed from cart'
+        )
             del cart[variation_id]
             self.request.session.save()
-            messages.success(self.request, 'Product removed from cart')
         else:
             messages.error(self.request, 'Product not found in cart')
         return redirect(http_referer)
