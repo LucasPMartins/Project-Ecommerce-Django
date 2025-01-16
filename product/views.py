@@ -16,7 +16,6 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
     slug_url_kwarg = 'slug'
 
-
 class AddToCartView(View):
     def get(self,*args, **kwargs):
         # if self.request.session.get('cart'):
@@ -122,6 +121,6 @@ class CartView(View):
         }
         return render(self.request, 'product/cart.html',context)
 
-class FinalizeView(View):
+class ResumeView(View):
     ...
 
