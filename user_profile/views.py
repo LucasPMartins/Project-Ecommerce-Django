@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views import View
 from . import models
@@ -53,11 +54,13 @@ class CreateView(ProfileBaseView):
     def post(self, *args, **kwargs):
         if not self.userform.is_valid() or not self.profileform.is_valid():
             return self.renderizer
+        
         username = self.userform.cleaned_data.get('username')
         password = self.userform.cleaned_data.get('password')
         email = self.userform.cleaned_data.get('email')
         first_name = self.userform.cleaned_data.get('first_name')
         last_name = self.userform.cleaned_data.get('last_name')
+        
         # User logged in
         if self.request.user.is_authenticated:
             user = get_object_or_404(User, username=self.request.user.username)
@@ -96,11 +99,46 @@ class CreateView(ProfileBaseView):
                 login(self.request, user=user)
         self.request.session['cart'] = self.cart
         self.request.session.save()
-        return self.renderizer
+
+        messages.success(
+            self.request,
+            'Profile created or updated successfully!'
+        )
+        return redirect('profile:create')
+
+class UpdateView(View):
+    def get(self, *args, **kwargs):
+        return redirect('profile:create')
 
 class LoginView(View):
-    ...
+    def post(self, *args, **kwargs):
+        username = self.request.POST.get('username')
+        password = self.request.POST.get('password')
+
+        if not username or not password:
+            messages.error(self.request, 'Username and password are required!')
+            return redirect('profile:create')
+
+        authenticated_user = authenticate(
+            self.request,
+            username=username,
+            password=password
+        )
+
+        if not authenticated_user:
+            messages.error(self.request, 'Invalid username or password!')
+            return redirect('profile:create')
+
+        login(self.request, user=authenticated_user)
+        messages.success(self.request, 'User logged in successfully!')
+
+        return redirect('product:cart')
 
 class LogoutView(View):
-    ...
+    def get(self, *args, **kwargs):
+        cart = copy.deepcopy(self.request.session.get('cart', {}))
+        logout(self.request)
+        self.request.session['cart'] = cart
+        self.request.session.save()
+        return redirect('product:list')
 
