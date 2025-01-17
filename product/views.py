@@ -3,6 +3,7 @@ from django.views.generic import ListView,DetailView
 from django.views import View
 from django.contrib import messages
 from . import models
+from user_profile.models import UserProfile
 
 class ProductListView(ListView):
     model = models.Product
@@ -127,6 +128,15 @@ class ResumeView(View):
         if not self.request.user.is_authenticated:
             messages.error(self.request, 'You must be logged in to proceed to checkout')
             return redirect(reverse('profile:create'))
+
+        profile = UserProfile.objects.filter(user=self.request.user).exists()
+        if not profile:
+            messages.error(self.request, 'You must have a profile to proceed to checkout')
+            return redirect(reverse('profile:create'))
+
+        if not self.request.session.get('cart'):
+            messages.error(self.request, 'Your cart is empty')
+            return redirect(reverse('product:list'))
 
         context = {
             'user': self.request.user,
