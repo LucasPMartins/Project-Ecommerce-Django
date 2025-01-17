@@ -11,14 +11,14 @@
             <th>Total</th>
         </tr>
 
-        {% for product in cart.values %}
+        {% for key, product in cart.items %}
         <tr>
             <td class="d-none d-lg-block">
                 <img class="cart-img" src="{{ product.image }}" alt=" {{ product.name }}">
             </td>
             <td>
                 <a href="{% url 'product:detail' product.slug %}">{{ product.name }}</a>
-                <a class="ml-3" href="{% url 'product:removefromcart' %}?vid={{ product.product_id }}">
+                <a class="ml-3" href="{% url 'product:removefromcart' %}?vid={{ key }}">
                     <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
                 </a>
             </td>
