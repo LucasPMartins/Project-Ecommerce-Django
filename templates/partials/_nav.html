@@ -14,7 +14,7 @@
                 <a class="nav-link" href="{% url 'product:list' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="#">About Us</a>
             </li>
             {% if request.user.is_authenticated %}
             <li class="nav-item dropdown">
@@ -51,8 +51,9 @@
             </li>
             {% endif %}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'product:search' %}">
+            <input name="term" value="{{ request.get.term }}" class="form-control mr-sm-2" type="search"
+                placeholder="Search" aria-label="Search">
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>

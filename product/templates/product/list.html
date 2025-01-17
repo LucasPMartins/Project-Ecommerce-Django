@@ -12,7 +12,7 @@
             <div class="card">
 
                 {% if product.image %}
-                <a href="{{ product.slug }}">
+                <a href="{% url 'product:detail' product.slug %}">
                     <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
                 </a>
                 {% endif %}
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-light-custom text-center">
-                    <a href="{{ product.slug }}" class="btn btn-primary btn-sm m-1 btn-block">
+                    <a href="{% url 'product:detail' product.slug %}" class="btn btn-primary btn-sm m-1 btn-block">
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         Buy
                     </a>
