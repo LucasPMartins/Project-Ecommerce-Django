@@ -37,9 +37,11 @@ class AddToCartView(View):
         if is_simple_product:
             variation = get_object_or_404(models.Product, id=variation_id)
             product = variation
+            item_id = str(product.id)
         else:
             variation = get_object_or_404(models.ProductVariation, id=variation_id)
             product = variation.product
+            item_id = str(variation.id) + 'v'
 
         if variation.stock < 1:
             messages.error(self.request, 'Product out of stock')
@@ -50,8 +52,6 @@ class AddToCartView(View):
             self.request.session.save()
 
         cart = self.request.session.get('cart')
-
-        item_id = str(product.id)
 
         if item_id in cart:
             cart_quantity = cart[item_id]['quantity']
