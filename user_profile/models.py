@@ -60,6 +60,14 @@ class UserProfile(models.Model):
     def clean(self):
         error_messages = {}
 
+        profile = UserProfile.objects.filter(cpf=self.cpf or None).first()
+
+        if profile:
+            saved_cpf = profile.cpf
+
+            if saved_cpf is not None and self.pk != profile.pk:
+                error_messages['cpf'] = 'CPF already registered'
+
         if not check_cpf(self.cpf):
             error_messages['cpf'] = 'Type a valid CPF'
 
