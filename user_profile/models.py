@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthday = models.DateField()
     cpf = models.CharField(max_length=11,verbose_name='CPF')
-    adress = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
     number = models.CharField(max_length=5)
     complement = models.CharField(max_length=30,blank=True)
     neighborhood = models.CharField(max_length=30)
@@ -48,6 +48,9 @@ class UserProfile(models.Model):
             ('TO', 'Tocantins'),
         )
     )
+
+    def get_age(self):
+        return datetime.now().year - self.birthday.year
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'

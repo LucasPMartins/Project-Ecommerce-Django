@@ -3,7 +3,7 @@ from .models import UserProfile
 
 @admin.register(UserProfile)
 class UserProfile(admin.ModelAdmin):
-    list_display = ('id','user', 'birthday', 'cpf', 'adress', 'number','neighborhood', 'cep', 'city', 'state')
+    list_display = ('id','user', 'birthday', 'cpf', 'address', 'number','neighborhood', 'cep', 'city', 'state')
     list_display_links = ('id', 'user')
     search_fields = ('user__first_name', 'user__last_name', 'cpf', 'cep', 'city', 'state')
     list_filter = ('state',)
@@ -12,6 +12,6 @@ class UserProfile(admin.ModelAdmin):
             'fields': ('user', 'birthday', 'cpf')
         }),
         ('Address Information', {
-            'fields': ('adress', 'number', 'neighborhood', 'cep', 'city', 'state')
+            'fields': ('address', 'number', 'neighborhood', 'cep', 'city', 'state')
         }),
     )

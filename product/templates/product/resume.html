@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block content %}
+
+<div class="row mb-5">
+    <div class="col-lg">
+        <h2>Summary of your purchase</h2>
+
+        <p class="lead">User Details</p>
+        <p>If you need to edit, <a href="{% url 'profile:create' %}">click here</a></p>
+        <dl class="row">
+            <dt class="col-lg-2">Name:</dt>
+            <dd class="col-lg-4">{{ user.first_name }}</dd>
+            <dt class="col-lg-2">Last Name:</dt>
+            <dd class="col-lg-4">{{ user.last_name }}</dd>
+
+            <dt class="col-lg-2">Age:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.get_age }}</dd>
+            <dt class="col-lg-2">Birth:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.birthday }}</dd>
+
+            <dt class="col-lg-2">CPF:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.cpf }}</dd>
+            <dt class="col-lg-2">E-mail:</dt>
+            <dd class="col-lg-4">{{ user.email }}</dd>
+        </dl>
+
+        <p class="lead">Address Details</p>
+        <p>If you need to edit, <a href="{% url 'profile:create' %}">click here</a></p>
+        <dl class="row">
+            <dt class="col-lg-2">Address:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.address }}</dd>
+            <dt class="col-lg-2">Number:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.number }}</dd>
+
+            <dt class="col-lg-2">Complement:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.complement }}</dd>
+            <dt class="col-lg-2">Bairro:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.neighborhood }}</dd>
+
+            <dt class="col-lg-2">City:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.city }}</dd>
+            <dt class="col-lg-2">State:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.state }}</dd>
+
+            <dt class="col-lg-2">CEP:</dt>
+            <dd class="col-lg-4">{{ user.userprofile.cep }}</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <h3>Shopping Cart</h3>
+        <p class="lead">The products, quantities and prices you have chosen.</p>
+
+        {% include 'partials/_cart.html' %}
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col">
+        <p class='lead'>Total in cart</p>
+
+        <div class='table-responsive'>
+            <table class="table">
+                <tr>
+                    <td class="font-weight-bold">Total</td>
+                    <td class="text-right">{{ request.session.cart | total_cart_price | format_price }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="btn btn-block btn-primary btn-lg" href="{% url 'order:payment' %}">
+            Place order and pay
+        </a>
+    </div>
+</div>
+
+{% endblock %}

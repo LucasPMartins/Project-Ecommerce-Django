@@ -10,47 +10,7 @@
         <h3>Shopping Cart</h3>
         <p class="lead">The products, quantities and prices you have chosen.</p>
 
-        <div class="table-responsive">
-            <table class="table">
-                <tr>
-                    <th class="d-none d-lg-block">Image</th>
-                    <th>Product</th>
-                    <th>V.</th>
-                    <th>QTY.</th>
-                    <th>Total</th>
-                </tr>
-
-                {% for product in cart.values %}
-                <tr>
-                    <td class="d-none d-lg-block">
-                        <img class="cart-img" src="{{ product.image }}" alt=" {{ product.name }}">
-                    </td>
-                    <td>
-                        <a href="{% url 'product:detail' product.slug %}">{{ product.name }}</a>
-                        <a class="ml-3" href="{% url 'product:removefromcart' %}?vid={{ product.product_id }}">
-                            <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                    <td>{{ product.variation_name }}</td>
-                    <td>
-                        {{ product.quantity }} x
-                        {% if product.discount_price > 0 %}
-                        {{ product.discount_price | format_price }}
-                        {% else %}
-                        {{ product.price | format_price }}
-                        {% endif %}
-                    </td>
-                    {% if product.quantitative_discount_price > 0 %}
-                    <td>{{ product.quantitative_discount_price | format_price }}</td>
-                    {% else %}
-                    <td>{{ product.quantitative_price | format_price }}</td>
-                    {% endif %}
-
-                </tr>
-                {% endfor %}
-
-            </table>
-        </div>
+        {% include 'partials/_cart.html' %}
     </div>
 </div>
 
@@ -70,7 +30,7 @@
         </div>
     </div>
     <div class="col-lg mt-auto">
-        <a class="btn btn-lg btn-block btn-primary" href="#">
+        <a class="btn btn-lg btn-block btn-primary" href="{% url 'product:resume' %}">
             Finalize Order
         </a>
     </div>
