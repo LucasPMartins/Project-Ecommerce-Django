@@ -10,6 +10,7 @@ class ProductListView(ListView):
     template_name = 'product/list.html'
     context_object_name = 'products'
     paginate_by = 10
+    ordering = ['-id']
 
 class ProductDetailView(DetailView):
     model = models.Product

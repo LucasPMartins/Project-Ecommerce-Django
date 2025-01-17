@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load filters %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3 class="mb-4">Order of {{ user }}</h3>
+        <p>Below are all your orders placed in the store.</p>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tr>
+                    <th scope="col">Order</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">QTY. Items</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">More Details</th>
+                </tr>
+
+                {% for order in orders %}
+                <tr>
+                    <th scope="row">{{ order }}</td>
+                    <td>{{ order.total | format_price}}</td>
+                    <td>{{ order.total_qty }}</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'order:detail' order.id %}">
+                            See <i class="fas fa-search-plus ml-2"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% include 'partials/_pagination.html' %}
+
+{% endblock %}

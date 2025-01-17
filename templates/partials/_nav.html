@@ -26,7 +26,7 @@
                     <a class="dropdown-item" href="{% url 'profile:create' %}">Update Details</a>
                     <a class="dropdown-item" href="{% url 'profile:logout' %}">Logout</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="{% url 'order:list' %}">My Orders</a>
                 </div>
             </li>
             {% else %}

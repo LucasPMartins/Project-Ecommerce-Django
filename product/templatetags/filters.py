@@ -14,3 +14,7 @@ def total_cart_qty(cart):
 @register.filter
 def total_cart_price(cart):
     return utils.total_cart_price(cart)
+
+@register.filter
+def total_order_price(order):
+    return utils.total_order_price(order)

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load filters %}
+{% load static %}
+
+
+{% block content %}
+{% include 'partials/_order.html' %}
+<div class="row mt-3">
+    <div class="col">
+        <p class='lead'>Total in Order</p>
+
+        <div class='table-responsive'>
+            <table class="table">
+                <tr>
+                    <td class="font-weight-bold">Total</td>
+                    <td class="text-right">{{ order | total_order_price | format_price }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row mb-5">
+    <div class="col-lg">
+        {% include 'partials/_profile.html' %}
+    </div>
+</div>
+{% endblock %}
