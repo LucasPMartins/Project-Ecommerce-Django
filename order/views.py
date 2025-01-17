@@ -4,7 +4,8 @@ from django.views import View
 from django.http import HttpResponse
 
 class PaymentView(View):
-    pass
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Payment')
 
 class CloseOrderView(View):
     pass

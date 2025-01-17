@@ -50,6 +50,8 @@ class UserProfile(models.Model):
     )
 
     def get_age(self):
+        if datetime.now().month < self.birthday.month or (datetime.now().month == self.birthday.month and datetime.now().day < self.birthday.day):
+            return datetime.now().year - self.birthday.year - 1
         return datetime.now().year - self.birthday.year
 
     def __str__(self):
