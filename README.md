@@ -1,6 +1,6 @@
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=1e81b0&height=120&section=header"/>
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=bc121c&height=120&section=header"/>
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com/?font=JetBrains+Mono&color=1e81b0&size=45&center=true&vCenter=true&width=1000&lines=Project+Blog)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?font=JetBrains+Mono&color=bc121c&size=45&center=true&vCenter=true&width=1000&lines=Project+E-Commerce)](https://git.io/typing-svg)
 
 ## 📖 Project Description
 
@@ -61,4 +61,4 @@ This is a Django-based e-commerce project developed as part of the "Python 3 Com
 
 
 
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=1e81b0&height=120&section=footer"/>
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=bc121c&height=120&section=footer"/>
