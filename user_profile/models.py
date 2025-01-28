@@ -75,8 +75,9 @@ class UserProfile(models.Model):
             error_messages['cep'] = 'Type a valid CEP'
 
         current_year = datetime.now().year
-        if self.birthday.year < 1900 or self.birthday.year > current_year:
-            error_messages['birthday'] = 'Type a valid birthday'
+        if self.birthday:
+            if self.birthday.year < 1900 or self.birthday.year > current_year:
+                error_messages['birthday'] = 'Type a valid birthday'
 
         if error_messages:
             raise ValidationError(error_messages)

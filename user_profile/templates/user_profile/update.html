@@ -1,11 +1,21 @@
-{% extends 'user_profile/create.html' %}
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block title %}Update
+Profile - {%endblock title %} {% block content %}
 
+<div class="row">
+  {% if request.user.is_authenticated %}
+  <div class="col-lg mt-3">
+    <form method="POST" action="">
+      {% csrf_token %} {{ userform | crispy }} {{ profileform | crispy }}
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Send
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+</div>
 
-{% block title %}Update Profile - {% endblock title %}
-
-{% block title_register %}
-<h4>Update Details</h4>
-<p>
-    Use the form below to update your details.
-</p>
 {% endblock %}

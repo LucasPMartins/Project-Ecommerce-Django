@@ -52,7 +52,7 @@ class ProfileBaseView(View):
 
 class CreateView(ProfileBaseView):
     def post(self, *args, **kwargs):
-        if not self.userform.is_valid() or not self.profileform.is_valid():
+        if not self.userform.is_valid():
             messages.error(self.request, 'There are errors in the registration form, please check that all fields have been filled in correctly!')
             return self.renderizer
         
@@ -85,10 +85,6 @@ class CreateView(ProfileBaseView):
             user = self.userform.save(commit=False)
             user.set_password(password)
             user.save()
-
-            profile = self.profileform.save(commit=False)
-            profile.user = user
-            profile.save()
 
         if password:
             authenticated_user = authenticate(

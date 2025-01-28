@@ -1,51 +1,64 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
-{% block title %}Create Profile - {% endblock title %}
-
-{% block content %}
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block title %}Create
+Profile - {% endblock title %} {% block content %}
 
 <div class="row">
+  {% if not request.user.is_authenticated %}
+  <div class="col-lg mt-3">
+    <h4>Login</h4>
+    <p>
+      If you are already registered, simply log in with your username and
+      password below.
+    </p>
 
-    {% if not request.user.is_authenticated %}
-    <div class="col-lg mt-3">
-        <h4>Login</h4>
-        <p>If you are already registered, simply log in with your username and password below.</p>
+    <form method="POST" action="{% url 'profile:login' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="InputUser1">Username</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          id="InputUser1"
+          aria-describedby="usernameHelp"
+          placeholder="Enter your username"
+        />
+      </div>
+      <div class="form-group">
+        <label for="InputPassword1">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="InputPassword1"
+          placeholder="Enter your Password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">
+        Submit
+      </button>
+    </form>
+    <h4>Want to advertise a product?</h4>
+    <p>
+      Click <a href="{% url seller:create %}">here</a> to sign up as a seller
+      and advertise your products in our store.
+    </p>
+  </div>
+  {% endif %}
 
-        <form method="POST" action="{% url 'profile:login' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="InputUser1">Username</label>
-                <input type="text" name="username" class="form-control" id="InputUser1" aria-describedby="usernameHelp"
-                    placeholder="Enter your username">
-            </div>
-            <div class="form-group">
-                <label for="InputPassword1">Password</label>
-                <input type="password" name="password" class="form-control" id="InputPassword1"
-                    placeholder="Enter your Password">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block btn-lg">Submit</button>
-        </form>
-
-    </div>
-    {% endif %}
-
-    <div class="col-lg mt-3">
-        {% block title_register %}
-        <h4>Register</h4>
-        <p>If you are not yet registered, use the form below to register.</p>
-        {% endblock %}
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{ userform | crispy }}
-            {{ profileform | crispy }}
-            <div class="row">
-                <div class="col">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
-                </div>
-            </div>
-        </form>
-    </div>
+  <div class="col-lg mt-3">
+    <h4>Register</h4>
+    <p>If you are not yet registered, use the form below to register.</p>
+    <form method="POST" action="">
+      {% csrf_token %} {{ userform | crispy }}
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Send
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock %}
