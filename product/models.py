@@ -2,6 +2,7 @@ from django.db import models
 from utils.images import resize_image
 from django.utils.text import slugify
 from utils import formater
+from seller.models import Seller
 
 class Category(models.Model):
     class Meta:
@@ -26,6 +27,7 @@ class Product(models.Model):
         )
     category = models.ManyToManyField(Category,blank=True)
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
+    seller_id = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products')
 
     def get_formatted_price(self):
         return formater.format_price(self.price)
