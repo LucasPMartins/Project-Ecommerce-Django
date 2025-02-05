@@ -101,7 +101,7 @@ class CreateView(ProfileBaseView):
             self.request,
             'Profile created or updated successfully!'
         )
-        return redirect('product:cart')
+        return redirect('product:list')
 
 class UpdateView(View):
     def get(self, *args, **kwargs):
