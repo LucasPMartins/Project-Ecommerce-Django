@@ -129,9 +129,6 @@ class LoginView(View):
         self.request.session['entryMode'] = 'client'
         login(self.request, user=authenticated_user)
         messages.success(self.request, 'User logged in successfully!')
-
-        if self.request.session['cart']:
-            return redirect('product:cart')
         return redirect('product:list')
 
 class LogoutView(View):
