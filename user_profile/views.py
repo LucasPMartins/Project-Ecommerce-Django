@@ -55,13 +55,13 @@ class CreateView(ProfileBaseView):
         if not self.userform.is_valid():
             messages.error(self.request, 'There are errors in the registration form, please check that all fields have been filled in correctly!')
             return self.renderizer
-        
+
         username = self.userform.cleaned_data.get('username')
         password = self.userform.cleaned_data.get('password')
         email = self.userform.cleaned_data.get('email')
         first_name = self.userform.cleaned_data.get('first_name')
         last_name = self.userform.cleaned_data.get('last_name')
-        
+
         # User logged in
         if self.request.user.is_authenticated:
             user = get_object_or_404(User, username=self.request.user.username)
@@ -95,6 +95,7 @@ class CreateView(ProfileBaseView):
             if authenticated_user:
                 login(self.request, user=user)
         self.request.session['cart'] = self.cart
+        self.request.session['entryMode'] = 'client'
         self.request.session.save()
 
         messages.success(
@@ -125,11 +126,13 @@ class LoginView(View):
         if not authenticated_user:
             messages.error(self.request, 'Invalid username or password!')
             return redirect('profile:create')
-
+        self.request.session['entryMode'] = 'client'
         login(self.request, user=authenticated_user)
         messages.success(self.request, 'User logged in successfully!')
 
-        return redirect('product:cart')
+        if self.request.session['cart']:
+            return redirect('product:cart')
+        return redirect('product:list')
 
 class LogoutView(View):
     def get(self, *args, **kwargs):

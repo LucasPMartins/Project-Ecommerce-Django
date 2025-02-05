@@ -27,7 +27,7 @@ class Product(models.Model):
         )
     category = models.ManyToManyField(Category,blank=True)
     stock = models.PositiveIntegerField(default=0,help_text='Show the total stock of the product if it is a variable product')
-    seller_id = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products')
+    seller_id = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products',blank=True)
 
     def get_formatted_price(self):
         return formater.format_price(self.price)

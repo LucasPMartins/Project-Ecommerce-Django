@@ -8,7 +8,6 @@ class ProfileForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['user']
 
-
 class UserForm(forms.ModelForm):
     password = forms.CharField(required=False, widget=forms.PasswordInput)
     password2 = forms.CharField(required=False, widget=forms.PasswordInput, label='Confirm Password')

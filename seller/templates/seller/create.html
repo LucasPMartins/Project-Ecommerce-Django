@@ -1,16 +1,16 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% block title %}Create
-Profile - {% endblock title %} {% block content %}
+Store Profile - {% endblock title %} {% block content %}
 
 <div class="row">
   {% if not request.user.is_authenticated %}
   <div class="col-lg mt-3">
-    <h4>Login in as a Client</h4>
+    <h4>Login in as a seller</h4>
     <p>
       If you are already registered, simply log in with your username and
       password below.
     </p>
 
-    <form method="POST" action="{% url 'profile:login' %}">
+    <form method="POST" action="{% url 'seller:login' %}">
       {% csrf_token %}
       <div class="form-group">
         <label for="InputUser1">Username</label>
@@ -38,17 +38,18 @@ Profile - {% endblock title %} {% block content %}
       </button>
     </form>
     <div class="pt-5">
-      <h4>Want to advertise a product?</h4>
+      <h4>Want to buy a product?</h4>
       <p>
         Click <a href="{% url 'seller:create' %}">here</a> to sign up as a
-        seller and advertise your products in our store.
+        client and buy some products in our store.
       </p>
     </div>
   </div>
+
   {% endif %}
 
   <div class="col-lg mt-3">
-    <h4>Register as a Client</h4>
+    <h4>Register as a Seller</h4>
     <p>If you are not yet registered, use the form below to register.</p>
     <form method="POST" action="">
       {% csrf_token %} {{ userform | crispy }}

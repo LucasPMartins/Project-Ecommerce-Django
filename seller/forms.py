@@ -3,6 +3,6 @@ from . import models
 
 class StoreForm(forms.ModelForm):
     class Meta:
-        model = models.Store
+        model = models.Seller
         fields = '__all__'
         exclude = ['user']

@@ -1,60 +1,99 @@
-{% load static %}
-{% load filters %}
+{% load static %} {% load filters %}
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-    <a class="navbar-brand" href="{% url 'product:list' %}">E-Commerce</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+  <a class="navbar-brand" href="{% url 'product:list' %}">E-Commerce</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'product:list' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
-            </li>
-            {% if request.user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Account
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'profile:create' %}">Update Details</a>
-                    <a class="dropdown-item" href="{% url 'profile:logout' %}">Logout</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'order:list' %}">My Orders</a>
-                </div>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile:create' %}">Enter</a>
-            </li>
-            {% endif %}
-
-            {% if request.session.cart %}
-            <li class="nav-item">
-                <a class="nav-link nav-cart-link active" href="{% url 'product:cart' %}">
-                    <span class="nav-cart-text mr-1">
-                        Cart
-                    </span>
-                    <span class="nav-cart-count mr-1">
-                        <strong>{{ request.session.cart | total_cart_qty }}x</strong>
-                    </span>
-                    <span class="nav-cart-icon mr-2">
-                        <i class="fas fa-shopping-cart"></i>
-                    </span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'product:search' %}">
-            <input name="term" value="{{ request.get.term }}" class="form-control mr-sm-2" type="search"
-                placeholder="Search" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'product:list' %}"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About Us</a>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          {% if request.session.entryMode == 'client' %}
+          <a class="dropdown-item" href="{% url 'profile:create' %}"
+            >Update Details</a
+          >
+          <a class="dropdown-item" href="{% url 'profile:logout' %}">Logout</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'order:list' %}">My Orders</a>
+          {% elif request.session.entryMode == 'seller' %}
+          <a class="dropdown-item" href="{% url 'seller:create' %}"
+            >Update Details</a
+          >
+          <a class="dropdown-item" href="{% url 'seller:logout' %}">Logout</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'seller:list' %}"
+            >My Products</a
+          >
+          {% endif %}
+        </div>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile:create' %}">Enter</a>
+      </li>
+      {% endif %} {% if request.session.cart %}
+      <li class="nav-item">
+        <a
+          class="nav-link nav-cart-link active"
+          href="{% url 'product:cart' %}"
+        >
+          <span class="nav-cart-text mr-1"> Cart </span>
+          <span class="nav-cart-count mr-1">
+            <strong>{{ request.session.cart | total_cart_qty }}x</strong>
+          </span>
+          <span class="nav-cart-icon mr-2">
+            <i class="fas fa-shopping-cart"></i>
+          </span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+    <form
+      class="form-inline my-2 my-lg-0"
+      method="GET"
+      action="{% url 'product:search' %}"
+    >
+      <input
+        name="term"
+        value="{{ request.get.term }}"
+        class="form-control mr-sm-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+        Search
+      </button>
+    </form>
+  </div>
 </nav>

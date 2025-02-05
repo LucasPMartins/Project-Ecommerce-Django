@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from user_profile.models import UserProfile
 
-class Store(models.Model):
+class Seller(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     store_name = models.CharField(max_length=255)
     cnpj = models.CharField(max_length=14,verbose_name='CNPJ',unique=True)
     store_address = models.CharField(max_length=50)
@@ -45,7 +45,5 @@ class Store(models.Model):
             ('TO', 'Tocantins'),
         )
     )
-
-class Seller(models.Model):
-    user = models.OneToOneField(UserProfile,on_delete=models.CASCADE)
-    store = models.ForeignKey(Store,on_delete=models.CASCADE,null=True)
+    def __str__(self):
+        return f'{self.user}'

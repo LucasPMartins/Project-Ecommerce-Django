@@ -7,7 +7,7 @@ from datetime import datetime
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birthday = models.DateField()
+    birthday = models.DateField(null=True, blank=True)
     cpf = models.CharField(max_length=11,verbose_name='CPF',unique=True)
     address = models.CharField(max_length=50)
     number = models.CharField(max_length=5)
