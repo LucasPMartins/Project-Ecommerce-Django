@@ -1,0 +1,30 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+{% block title %}Edit Product - {%endblock title %} 
+
+{% block content %}
+
+<div class="row">
+  {% if request.user.is_authenticated %}
+  <div class="col-lg mt-3">
+    <h2 class="pb-3">Edit your product information:</h2>
+    <form method="POST" action="">
+      {% csrf_token %} {{ productform | crispy }}
+      <h2 class="pb-3">Product Variations: </h2>
+      {{ variation_formset.management_form }} 
+      {% for form in variation_formset %}
+      <div class="variation-form">{{ form.as_p }}</div>
+      {% endfor %}
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

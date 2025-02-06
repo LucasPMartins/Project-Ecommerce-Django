@@ -47,8 +47,8 @@ class Product(models.Model):
         if self.product_type == 'variable':
             if self.variations.count() > 0:
                 self.stock = sum([var.stock for var in self.variations.all()])
-                self.price = self.variations.first().price
-                self.discount_price = self.variations.first().discount_price
+                # self.price = self.variations.first().price
+                # self.discount_price = self.variations.first().discount_price
 
         image_changed = False
         if self.image:

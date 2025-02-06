@@ -1,39 +1,34 @@
-{% load static %} {% load filters %}
-
+{% extends 'base.html' %} 
+{% load filters %} 
+{% block title %}Products of {{ user }} - {% endblock %} 
+{% block content %}
 <div class="row">
   <div class="col">
-    <div class="row mt-4">
-      <div class="col">
-        <h3>Your products in the Store</h3>
-      </div>
-    </div>
+    <h3 class="mb-4">Products of {{ user }}</h3>
+    <p>Below are all your products announced in the store.</p>
 
-    <div class="table-responsive mt-3">
-      <table class="table">
+    <div class="table-responsive">
+      <table class="table table-striped">
         <tr>
           <th class="d-none d-lg-block">Image</th>
-          <th>Product</th>
-          <th>V.</th>
-          <th>QTY.</th>
-          <th>Stock</th>
+          <th scope="col">Product</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Price</th>
+          <th scope="col">More Details</th>
         </tr>
 
-        {% for item in order.items.all %}
+        {% for product in products %}
         <tr>
           <td class="d-none d-lg-block">
-            <img
-              class="cart-img"
-              src="{{ item.image }}"
-              alt="{{ item.product }}"
-            />
+            <img class="cart-img" src="{{ product.image.url }}" alt="{{ product.name }}">
           </td>
-          <td>{{item.product}}</td>
-          <td>{{item.variation}}</td>
-          <td>{{item.quantity}}</td>
+          <td>{{ product.name}}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.price | format_price }}</td>
           <td>
-            {% if item.price_promotional > 0 %} {{ item.price_promotional |
-            format_price }} {% else %} {{ item.price | format_price }} {% endif
-            %}
+            <a href="{% url 'seller:detail' product.id %}">
+              Edit <i class="fas fa-search-plus ml-2"></i>
+            </a>
           </td>
         </tr>
         {% endfor %}
@@ -41,3 +36,6 @@
     </div>
   </div>
 </div>
+
+{% include 'partials/_pagination.html' %} 
+{% endblock %}

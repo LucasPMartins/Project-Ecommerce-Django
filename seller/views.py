@@ -7,6 +7,9 @@ from user_profile import models,forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import StoreForm
+from product.models import Product, ProductVariation
+from django.views.generic import DetailView,ListView
+from product.forms import ProductForm, ProductVariationForm, ProductVariationFormSet
 
 # Create your views here.
 
@@ -159,9 +162,86 @@ class LogoutView(View):
         self.request.session['cart'] = cart
         self.request.session.save()
         return redirect('product:list')
-    
-class ListProductsView(View):
-    ...
 
-class AdvertiseView(View):
-    ...
+class DetailProductView(View):
+    template_name = 'seller/detail.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+
+        self.cart = copy.deepcopy(self.request.session.get('cart', {}))
+        self.product = Product.objects.filter(seller_id = self.request.user.pk,id=self.kwargs['pk']).first()
+        self.variation_formset = ProductVariationFormSet(data=self.request.POST or None, instance=self.product)
+        self.variation = ProductVariation.objects.filter(product=self.product.pk).first()
+
+        if self.product:
+            self.context = {
+                'productform': ProductForm(
+                    data=self.request.POST or None,
+                    instance=self.product,
+                    ),
+                'variation_formset': self.variation_formset,
+            }
+        else:
+            self.context = {
+            'productform':ProductForm(data=self.request.POST or None),
+            'variation_formset': self.variation_formset,
+        }
+        self.productform = self.context['productform']
+        self.request.session['is_seller'] = True
+
+        self.renderizer = render(self.request, self.template_name, self.context)
+
+    def get(self, request, *args, **kwargs):
+        return self.renderizer
+
+    def post(self, *args, **kwargs):
+        if not self.productform.is_valid():
+            messages.error(self.request, 'There are errors in the form, please check that all fields have been filled in correctly!')
+            return self.renderizer
+
+        user = User.objects.filter(id=self.request.user.pk).first()
+        seller = Seller.objects.filter(user=user.pk).first()
+
+        # Update Product
+        if self.product:
+            product = get_object_or_404(Product,seller_id = self.request.user.pk,id=self.kwargs['pk'])
+            product = self.productform.save(commit=False)  # Evita salvar diretamente
+            product.save()  # Salva no banco de dados
+            self.variation_formset.instance = self.product
+            self.variation_formset.save()
+        # New product
+        else:
+            product = Product(**self.productform)
+            product.seller_id = seller
+            product.save()
+            self.variation_formset.instance = self.product
+            self.variation_formset.save()
+
+        self.request.session['cart'] = self.cart
+        self.request.session.save()
+
+        messages.success(
+            self.request,
+            'Product created or updated successfully!'
+        )
+        return redirect('seller:detail',self.kwargs['pk'])
+
+class DispatchLoginRequiredMixin(View):
+    def dispatch(self, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            messages.error(self.request, "You need to login to continue")
+            return redirect('profile:create')
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(seller_id=self.request.user.pk)
+        return qs
+
+class ListProductsView(DispatchLoginRequiredMixin,ListView):
+    model = Product
+    template_name = 'seller/list.html'
+    context_object_name = 'products'
+    paginate_by = 10
+    ordering = ['-id']
