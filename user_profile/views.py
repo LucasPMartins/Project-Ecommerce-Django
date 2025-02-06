@@ -39,6 +39,7 @@ class ProfileBaseView(View):
                 'profileform': forms.ProfileForm(data=self.request.POST or None)
             }
 
+        self.request.session['is_seller'] = False
         self.userform = self.context['userform']
         self.profileform = self.context['profileform']
 
@@ -95,7 +96,6 @@ class CreateView(ProfileBaseView):
             if authenticated_user:
                 login(self.request, user=user)
         self.request.session['cart'] = self.cart
-        self.request.session['entryMode'] = 'client'
         self.request.session.save()
 
         messages.success(
@@ -126,8 +126,9 @@ class LoginView(View):
         if not authenticated_user:
             messages.error(self.request, 'Invalid username or password!')
             return redirect('profile:create')
-        self.request.session['entryMode'] = 'client'
+        
         login(self.request, user=authenticated_user)
+        self.request.session['is_seller'] = False
         messages.success(self.request, 'User logged in successfully!')
         return redirect('product:list')
 

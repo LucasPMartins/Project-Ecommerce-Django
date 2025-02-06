@@ -26,7 +26,7 @@ class CreateView(View):
             self.store = Seller.objects.filter(
                 user=self.request.user
             ).first()
-            
+
             self.context = {
                 'userform': forms.UserForm(
                     data=self.request.POST or None,
@@ -48,6 +48,8 @@ class CreateView(View):
                 'profileform': forms.ProfileForm(data=self.request.POST or None),
                 'storeform': StoreForm(data=self.request.POST or None),
             }
+
+        self.request.session['is_seller'] = True
 
         self.userform = self.context['userform']
         self.profileform = self.context['profileform']
@@ -113,7 +115,6 @@ class CreateView(View):
             if authenticated_user:
                 login(self.request, user=user)
         self.request.session['cart'] = self.cart
-        self.request.session['entryMode'] = 'seller'
         self.request.session.save()
 
         messages.success(
@@ -144,8 +145,9 @@ class LoginView(View):
         if not authenticated_user:
             messages.error(self.request, 'Invalid username or password!')
             return redirect('seller:create')
-        self.request.session['entryMode'] = 'seller'
+
         login(self.request, user=authenticated_user)
+        self.request.session['is_seller'] = True
         messages.success(self.request, 'User logged in successfully!')
 
         return redirect('product:list')
@@ -159,4 +161,7 @@ class LogoutView(View):
         return redirect('product:list')
     
 class ListProductsView(View):
+    ...
+
+class AdvertiseView(View):
     ...

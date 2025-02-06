@@ -45,7 +45,7 @@ class Product(models.Model):
             self.slug = f'{slugify(self.name)}-{self.id}'
 
         if self.product_type == 'variable':
-            if self.variations:
+            if self.variations.count() > 0:
                 self.stock = sum([var.stock for var in self.variations.all()])
                 self.price = self.variations.first().price
                 self.discount_price = self.variations.first().discount_price
@@ -60,7 +60,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
 
 # Atributo: como "cor" ou "tamanho"
 class AttributeName(models.Model):
@@ -93,7 +92,7 @@ class ProductVariation(models.Model):
     )
     price = models.FloatField(max_length=100, null=True, blank=True)
     discount_price = models.FloatField(max_length=100,default=0.00)
-    attributes = models.ManyToManyField(AttributeValue, related_name="variations")
+    attributes = models.ManyToManyField(AttributeValue, related_name="variation_names")
     stock = models.PositiveIntegerField(default=0)
 
     def get_fomatted_price(self):

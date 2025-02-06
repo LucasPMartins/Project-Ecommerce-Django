@@ -1,22 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     {% include "partials/_head.html" %}
     <title>{% block title %}{% endblock title %}E-Commerce</title>
     {% block additional_head %}{% endblock additional_head %}
-</head>
+  </head>
 
-<body>
+  <body>
     {% include "partials/_nav.html" %}
-
+    <p>{{ is_seller}}</p>
     <main class="container mt-4 mb-4">
-        {% include 'partials/_messages.html' %}
-        {% block content %}{% endblock content %}
+      {% include 'partials/_messages.html' %}
+      {% block content %} {% endblock content %}
     </main>
 
     {% include "partials/_footer.html" %}
-
-</body>
-
+  </body>
 </html>

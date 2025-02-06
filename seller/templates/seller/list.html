@@ -1,0 +1,43 @@
+{% load static %} {% load filters %}
+
+<div class="row">
+  <div class="col">
+    <div class="row mt-4">
+      <div class="col">
+        <h3>Your products in the Store</h3>
+      </div>
+    </div>
+
+    <div class="table-responsive mt-3">
+      <table class="table">
+        <tr>
+          <th class="d-none d-lg-block">Image</th>
+          <th>Product</th>
+          <th>V.</th>
+          <th>QTY.</th>
+          <th>Stock</th>
+        </tr>
+
+        {% for item in order.items.all %}
+        <tr>
+          <td class="d-none d-lg-block">
+            <img
+              class="cart-img"
+              src="{{ item.image }}"
+              alt="{{ item.product }}"
+            />
+          </td>
+          <td>{{item.product}}</td>
+          <td>{{item.variation}}</td>
+          <td>{{item.quantity}}</td>
+          <td>
+            {% if item.price_promotional > 0 %} {{ item.price_promotional |
+            format_price }} {% else %} {{ item.price | format_price }} {% endif
+            %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
