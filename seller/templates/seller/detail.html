@@ -8,7 +8,7 @@
   {% if request.user.is_authenticated %}
   <div class="col-lg mt-3">
     <h2 class="pb-3">Edit your product information:</h2>
-    <form method="POST" action="">
+    <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{ productform | crispy }}
 

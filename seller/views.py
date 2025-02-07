@@ -178,12 +178,12 @@ class DetailProductView(View):
 
         if self.product:
             self.context = {
-                'productform': ProductForm(data=self.request.POST or None, instance=self.product),
+                'productform': ProductForm(data=self.request.POST or None,files=self.request.FILES or None, instance=self.product),
                 'variation_formset': self.variation_formset,
             }
         else:
             self.context = {
-                'productform': ProductForm(data=self.request.POST or None),
+                'productform': ProductForm(data=self.request.POST or None,files=self.request.FILES or None),
                 'variation_formset': self.variation_formset,
             }
         self.productform = self.context['productform']
