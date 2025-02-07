@@ -38,4 +38,15 @@
 </div>
 
 {% include 'partials/_pagination.html' %} 
+
+<div class="row">
+  <div class="col">
+    <a href="{% url 'seller:createProduct' %}">
+      <button type="button" class="btn btn-primary btn-lg btn-block mt-5">
+        Announce New Product
+      </button>
+    </a>
+  </div>
+</div>
+
 {% endblock %}

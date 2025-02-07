@@ -170,62 +170,58 @@ class DetailProductView(View):
         super().setup(request, *args, **kwargs)
 
         self.cart = copy.deepcopy(self.request.session.get('cart', {}))
-        self.product = Product.objects.filter(seller_id = self.request.user.pk,id=self.kwargs['pk']).first()
+        if 'pk' in  self.kwargs:
+            self.product = Product.objects.filter(seller_id=self.request.user.pk, id=self.kwargs['pk']).first()
+        else:
+            self.product = None
         self.variation_formset = ProductVariationFormSet(data=self.request.POST or None, instance=self.product)
-        self.variation = ProductVariation.objects.filter(product=self.product.pk).first()
 
         if self.product:
             self.context = {
-                'productform': ProductForm(
-                    data=self.request.POST or None,
-                    instance=self.product,
-                    ),
+                'productform': ProductForm(data=self.request.POST or None, instance=self.product),
                 'variation_formset': self.variation_formset,
             }
         else:
             self.context = {
-            'productform':ProductForm(data=self.request.POST or None),
-            'variation_formset': self.variation_formset,
-        }
+                'productform': ProductForm(data=self.request.POST or None),
+                'variation_formset': self.variation_formset,
+            }
         self.productform = self.context['productform']
         self.request.session['is_seller'] = True
 
-        self.renderizer = render(self.request, self.template_name, self.context)
-
     def get(self, request, *args, **kwargs):
-        return self.renderizer
+        return render(self.request, self.template_name, self.context)  # Atualizado para evitar uso desnecessário de self.renderizer
 
     def post(self, *args, **kwargs):
         if not self.productform.is_valid():
             messages.error(self.request, 'There are errors in the form, please check that all fields have been filled in correctly!')
-            return self.renderizer
+            return render(self.request, self.template_name, self.context)  # Retorna render atualizado
 
-        user = User.objects.filter(id=self.request.user.pk).first()
+        user = self.request.user
         seller = Seller.objects.filter(user=user.pk).first()
 
-        # Update Product
+        # Atualiza Produto Existente
         if self.product:
-            product = get_object_or_404(Product,seller_id = self.request.user.pk,id=self.kwargs['pk'])
-            product = self.productform.save(commit=False)  # Evita salvar diretamente
-            product.save()  # Salva no banco de dados
-            self.variation_formset.instance = self.product
-            self.variation_formset.save()
-        # New product
-        else:
-            product = Product(**self.productform)
-            product.seller_id = seller
+            product = get_object_or_404(Product, seller_id=self.request.user.pk, id=self.kwargs['pk'])
+            product = self.productform.save(commit=False)
+            product.seller_id = seller  # Garante que o seller está definido corretamente
             product.save()
-            self.variation_formset.instance = self.product
+            self.variation_formset.instance = product
+            self.variation_formset.save()
+
+        # Criando um Novo Produto
+        else:
+            product = self.productform.save(commit=False)
+            product.seller_id = seller  # Define o seller corretamente
+            product.save()
+            self.variation_formset.instance = product  # Corrige erro de instância
             self.variation_formset.save()
 
         self.request.session['cart'] = self.cart
         self.request.session.save()
 
-        messages.success(
-            self.request,
-            'Product created or updated successfully!'
-        )
-        return redirect('seller:detail',self.kwargs['pk'])
+        messages.success(self.request, 'Product created or updated successfully!')
+        return redirect('seller:detail', pk=product.pk)  # Corrigido para garantir que um ID válido é passado
 
 class DispatchLoginRequiredMixin(View):
     def dispatch(self, *args, **kwargs):
@@ -245,3 +241,16 @@ class ListProductsView(DispatchLoginRequiredMixin,ListView):
     context_object_name = 'products'
     paginate_by = 10
     ordering = ['-id']
+
+class DeleteProductView(View):
+    def post(self, request, pk):
+        print(pk)
+        product = get_object_or_404(Product,seller_id = self.request.user.pk,pk=pk)
+        print(product)
+        product.delete()
+        print(product)
+        messages.success(request, "Product deleted successfully!")
+        return redirect('seller:list')  # Redireciona para a lista de produtos
+
+class CreateProductView(DetailProductView):
+    ...
