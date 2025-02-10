@@ -4,22 +4,27 @@
 
 ## 📖 Project Description
 
-This is a Django-based e-commerce project developed as part of the "Python 3 Completo" course on Udemy, instructed by Professor Luiz Otávio. It includes features such as product listing, user authentication, shopping cart, and order management.
+This project is a fully functional e-commerce website built using Django, a high-level Python web framework. The website allows users to browse products, add them to their cart, and proceed to checkout. It includes features such as user authentication, product management, order processing, and an admin interface for managing the site content.
 
-## 🛠️ Features
+Key features of the project include:
 
-- User Authentication
-- Product Listing
-- Product Detail View
-- Shopping Cart
-- Order Management
-- Responsive Design
+- **User Authentication**: Secure user registration, login, and profile management for clients and sellers.
+- **Product Management**: Admin interface for adding, updating, and deleting products or in-site interface for sellers to manage their products without using the admin interface.
+- **Order Processing**: Users can place orders, view order history, and track order status.
+- **Responsive Design**: The website is designed to be responsive and user-friendly on all devices.
+- **Media Management**: Upload and manage product images and other media files.
+
+![Image](https://github.com/user-attachments/assets/22706223-5b67-4565-9b0f-835d5c40aa32)
+![Image](https://github.com/user-attachments/assets/0a049df3-e1e2-4089-8e48-d56dddf2f344)
+![Image](https://github.com/user-attachments/assets/4b14c7f1-56b3-4b67-9376-2bdb6c94376a)
+![Image](https://github.com/user-attachments/assets/6de4e6e7-971e-4111-bbe2-3dd5f879ac99)
 
 ## 👨‍💻 Languages and Technologies
 ![Python](https://img.shields.io/badge/python-0D1117?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Django](https://img.shields.io/badge/django-0D1117?style=for-the-badge&logo=django&logoColor=092E20)
 ![CSS3](https://img.shields.io/badge/css3-0D1117?style=for-the-badge&logo=css3&logoColor=%231572B6)
 ![HTML5](https://img.shields.io/badge/html5-0D1117?style=for-the-badge&logo=html5&logoColor=%23E34F26)
+![Bootstrap](https://img.shields.io/badge/bootstrap-0D1117?style=for-the-badge&logo=bootstrap&logoColor=%23563D7C)
 
 ### Installation
 
@@ -56,9 +61,5 @@ This is a Django-based e-commerce project developed as part of the "Python 3 Com
     ```
 
 7. Open your browser and go to `http://127.0.0.1:8000/` to see the e-commerce site.
-
-## 📸 Screenshots
-
-
 
 <img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=bc121c&height=120&section=footer"/>
